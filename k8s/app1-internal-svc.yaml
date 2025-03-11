@@ -1,0 +1,10 @@
+# app1-internal-svc.yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: app1-internal
+spec:
+  selector:
+    app: app1
+  ports:
+    - port: 80

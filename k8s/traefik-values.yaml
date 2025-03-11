@@ -1,0 +1,9 @@
+installation:
+  crds: true
+
+service:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+
+additionalArguments:
+  - "--ping"

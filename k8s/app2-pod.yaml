@@ -1,0 +1,19 @@
+# App2 pod
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: app2
+  labels:
+    app: app2
+spec:
+  containers:
+    - name: app2
+      image: curlimages/curl:7.74.0
+      command: ["/bin/sh", "-c"]
+      args:
+        - >
+          while true; do
+            curl -s -X GET http://app1.app1-ns
+            sleep 1
+          done
