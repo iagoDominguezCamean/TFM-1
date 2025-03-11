@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = {
-        source  = "hashicorp/azurerm"
-        version = "~>4.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_virtual_network" "vnet_kubenet" {
   name = "vnet-idomingc-kubenet"
   resource_group_name = "idomingc"
