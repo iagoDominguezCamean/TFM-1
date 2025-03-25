@@ -5,7 +5,8 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - http:
+  - host: aks-idomingc.azure.net
+    http:
       paths:
       - path: /app1
         pathType: Prefix
