@@ -2,7 +2,7 @@ resource "azurerm_virtual_network" "vnet_cilium" {
   count = var.create_cilium_cluster ? 1 : 0
 
   name                = "vnet-idomingc-cilium"
-  resource_group_name = var.resource_group_name
+  resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
   address_space       = [ "10.1.0.0/16" ]
 }
@@ -20,7 +20,7 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   count = var.create_cilium_cluster ? 1 : 0
 
   name                = "k8s-idomingc-cilium"
-  resource_group_name = var.resource_group_name
+  resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
   dns_prefix          = "aks-idomingc-cilium"
 
