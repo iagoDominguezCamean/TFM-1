@@ -1,21 +1,21 @@
 resource "azurerm_virtual_network" "vnet_kubenet" {
   name                = "vnet-idomingc-kubenet"
-  resource_group_name = "idomingc"
-  location            = "westeurope"
+  resource_group_name = var.resource_group_name
+  location            = var.location
   address_space       = [ "10.0.0.0/16" ]
 }
 
 resource "azurerm_subnet" "kubenet_subnet" {
-  name = "kubenetSubnet"
-  resource_group_name  = "idomingc"
+  name                 = "kubenetSubnet"
+  resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet_kubenet.name
   address_prefixes     = ["10.0.0.0/24"]
 }
 
 resource "azurerm_kubernetes_cluster" "k8s_cluster" {
   name                = "aks-idomingc-test"
-  location            = "westeurope"
-  resource_group_name = "idomingc"
+  location            = var.location
+  resource_group_name = var.resource_group_name
   dns_prefix          = "aks-idomingc-kubenet"
 
   default_node_pool {
