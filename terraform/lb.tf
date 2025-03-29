@@ -37,6 +37,16 @@ data "kubernetes_service" "kubenet_service" {
   }
 }
 
+data "kubernetes_service" "cilium_service" {
+  count = var.create_appgtw ? 1 : 0
+
+  provider = kubernetes.cilium
+  metadata {
+    name      = "app1"
+    namespace = "default"
+  }
+}
+
 resource "azurerm_application_gateway" "appgtw" {
   count = var.create_appgtw ? 1 : 0
 
@@ -47,14 +57,15 @@ resource "azurerm_application_gateway" "appgtw" {
   enable_http2        = true
   
   
-  autoscale_configuration {
-    min_capacity = 2
-    max_capacity = 2
-  }
+  # autoscale_configuration {
+  #   min_capacity = 2
+  #   max_capacity = 2
+  # }
 
   sku {
-    name = "Standard_v2"
-    tier = "Standard_v2" 
+    name     = "Standard_v2"
+    tier     = "Standard_v2" 
+    capacity = 2
   }
 
   gateway_ip_configuration {
@@ -74,7 +85,7 @@ resource "azurerm_application_gateway" "appgtw" {
 
   backend_address_pool {
     name  = "backend_pool"
-    fqdns = [ data.kubernetes_service.kubenet_service[0].status.0.load_balancer.0.ingress.0.ip ]
+    fqdns = [ data.kubernetes_service.kubenet_service[0].status.0.load_balancer.0.ingress.0.ip, data.kubernetes_service.cilium_service[0].status.0.load_balancer.0.ingress.0.ip ]
   }
 
   backend_http_settings {
@@ -97,5 +108,6 @@ resource "azurerm_application_gateway" "appgtw" {
     http_listener_name         = "http_listener"
     backend_address_pool_name  = "backend_pool"
     backend_http_settings_name = "backend_config"
+    priority                   = 100
   }
 }

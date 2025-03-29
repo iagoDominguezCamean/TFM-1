@@ -3,7 +3,7 @@ resource "azurerm_virtual_network" "vnet_cilium" {
 
   name                = "vnet-idomingc-cilium"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
+  location            = "northeurope"
   address_space       = [ "10.1.0.0/16" ]
 }
 
@@ -11,7 +11,7 @@ resource "azurerm_subnet" "cilium_node_subnet" {
   count = var.create_cilium_cluster ? 1 : 0
   
   name                 = "CiliumNodeSubnet"
-  resource_group_name  = var.location
+  resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet_cilium[0].name
   address_prefixes     = [ "10.1.0.0/24" ]
 }
@@ -21,7 +21,7 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
 
   name                = "k8s-idomingc-cilium"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
+  location            = "northeurope"
   dns_prefix          = "aks-idomingc-cilium"
 
   default_node_pool {

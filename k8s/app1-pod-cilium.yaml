@@ -1,0 +1,14 @@
+# app1-pod.yaml
+kind: Pod
+apiVersion: v1
+metadata:
+  name: app1
+  labels:
+    app: app1
+spec:
+  containers:
+    - name: app1
+      image: hashicorp/http-echo:0.2.3
+      args:
+        - "-text=Hello, I'm using Cilium"
+        - "-listen=:80"
