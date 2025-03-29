@@ -1,10 +1,10 @@
 resource "azurerm_public_ip" "pub_ip_lb" {
-  name                = "pubip-lb-aks"
+  name                = "pubip-appgtw"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
   sku                 = "Standard"
-  zones               = ["1"]
+  zones               = ["1", "2"]
 }
 
 resource "azurerm_virtual_network" "appgtw_vnet" {
@@ -44,12 +44,6 @@ resource "azurerm_application_gateway" "appgtw" {
   zones               = [ "1" ]
   enable_http2        = true
   
-  
-  # autoscale_configuration {
-  #   min_capacity = 2
-  #   max_capacity = 2
-  # }
-
   sku {
     name     = "Standard_v2"
     tier     = "Standard_v2" 
@@ -58,44 +52,44 @@ resource "azurerm_application_gateway" "appgtw" {
 
   gateway_ip_configuration {
     subnet_id = azurerm_subnet.appgtw_subnet.id
-    name      = "IP_config"
+    name      = local.gateway_ip_configuration_name
   }
 
   frontend_port {
     port = 80
-    name = "aks-service"
+    name = local.frontend_port_name
   }
 
   frontend_ip_configuration {
-    name                 = format("%s-feip", azurerm_virtual_network.appgtw_vnet.name)
+    name                 = local.frontend_ip_configuration_name
     public_ip_address_id = azurerm_public_ip.pub_ip_lb.id
   }
 
   backend_address_pool {
-    name  = "backend_pool"
+    name  = local.backend_pool_name
     fqdns = [ data.kubernetes_service.kubenet_service.status.0.load_balancer.0.ingress.0.ip, data.kubernetes_service.cilium_service.status.0.load_balancer.0.ingress.0.ip ]
   }
 
   backend_http_settings {
-    name                  = "backend_config"
+    name                  = local.backend_http_settings_name
     port                  = 80
     protocol              = "Http"
     cookie_based_affinity = "Disabled"
   }
 
   http_listener {
-    frontend_port_name             = "aks-service"
-    frontend_ip_configuration_name = format("%s-feip", azurerm_virtual_network.appgtw_vnet.name)
+    frontend_port_name             = local.frontend_port_name
+    frontend_ip_configuration_name = local.frontend_ip_configuration_name
     protocol                       = "Http"
-    name                           = "http_listener"
+    name                           = local.http_listener_name
   }
 
   request_routing_rule {
-    name                       = "r1"
+    name                       = local.rule_name
     rule_type                  = "Basic"
-    http_listener_name         = "http_listener"
-    backend_address_pool_name  = "backend_pool"
-    backend_http_settings_name = "backend_config"
+    http_listener_name         = local.http_listener_name
+    backend_address_pool_name  = local.backend_pool_name
+    backend_http_settings_name = local.backend_http_settings_name
     priority                   = 100
   }
 }

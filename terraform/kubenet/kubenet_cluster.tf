@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_virtual_network" "vnet_kubenet" {
-  name                = "vnet-idomingc-kubenet"
+  name                = "VNET-KUBENET"
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
   address_space       = [ "10.0.0.0/16" ]
@@ -18,12 +18,10 @@ resource "azurerm_subnet" "kubenet_subnet" {
 }
 
 resource "azurerm_kubernetes_cluster" "k8s_cluster" {
-  name                = "aks-idomingc-test"
+  name                = "aks-kubenet"
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   dns_prefix          = "aks-idomingc-kubenet"
-  # private_cluster_enabled = true
-  # dns_prefix_private_cluster = "aks-idomingc-kubenet"
 
   default_node_pool {
     name           = "default"

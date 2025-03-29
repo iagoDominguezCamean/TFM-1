@@ -1,5 +1,5 @@
 resource "azurerm_virtual_network" "vnet_cilium" {
-  name                = "vnet-idomingc-cilium"
+  name                = "VNET-CILIUM"
   resource_group_name = var.resource_group_name
   location            = var.location
   address_space       = [ "10.1.0.0/16" ]
@@ -13,7 +13,7 @@ resource "azurerm_subnet" "cilium_node_subnet" {
 }
 
 resource "azurerm_kubernetes_cluster" "k8s_cilium" {
-  name                = "k8s-idomingc-cilium"
+  name                = "aks-cilium"
   resource_group_name = var.resource_group_name
   location            = var.location
   dns_prefix          = "aks-idomingc-cilium"
