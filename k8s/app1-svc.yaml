@@ -1,0 +1,16 @@
+# App1 service
+kind: Service
+apiVersion: v1
+metadata:
+  name: app1
+  annotations:
+    # service.beta.kubernetes.io/azure-load-balancer-ipv4: <load-balancer-ip>
+    # service.beta.kubernetes.io/azure-load-balancer-resource-group: <node resource group name>
+    # service.beta.kubernetes.io/azure-pip-name: <public ip name>
+    # service.beta.kubernetes.io/azure-dns-label-name: <unique-service-label>
+spec:
+  type: LoadBalancer
+  selector:
+    app: app1
+  ports:
+    - port: 80

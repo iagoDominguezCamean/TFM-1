@@ -27,7 +27,7 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   default_node_pool {
     node_count     = 2
     name           = "azurecilium"
-    vm_size        = "Standard_D2_v2"
+    vm_size        = "Standard_A2_v2"
     vnet_subnet_id = azurerm_subnet.cilium_node_subnet[0].id
   }
   
