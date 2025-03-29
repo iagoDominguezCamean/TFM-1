@@ -48,9 +48,3 @@ resource "local_file" "kube_config" {
   content         = azurerm_kubernetes_cluster.k8s_cluster.kube_config_raw
   file_permission = "0640"
 }
-
-resource "kubernetes_manifest" "echo_server" {
-  count = var.create_cilium_cluster ? 1 : 0
-  
-  manifest = yamldecode(file("../k8s/app1-pod.yaml"))
-}

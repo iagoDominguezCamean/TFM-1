@@ -35,8 +35,6 @@ data "kubernetes_service" "kubenet_service" {
     name      = "app1"
     namespace = "default"
   }
-
-  depends_on = [local_file.kube_config, kubernetes_manifest.echo_server]
 }
 
 resource "azurerm_application_gateway" "appgtw" {

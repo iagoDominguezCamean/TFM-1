@@ -18,5 +18,10 @@ provider "azurerm" {
 
 provider "kubernetes" {
   alias       = "kubenet"
-  config_path = "~/.kube/config"
+  config_path = "/home/iagodc/.kube/config"
+}
+
+provider "kubernetes" {
+  alias       = "cilium"
+  config_path = "/home/iagodc/.kube/config_cilium"
 }
