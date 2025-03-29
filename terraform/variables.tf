@@ -15,3 +15,9 @@ variable "location" {
   type        = string
   default     = "westeurope"
 }
+
+variable "create_appgtw" {
+  description = "Create the application gateway"
+  type        = bool
+  default     = false
+}

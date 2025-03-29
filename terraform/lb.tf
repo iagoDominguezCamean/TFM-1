@@ -1,5 +1,5 @@
 resource "azurerm_public_ip" "pub_ip_lb" {
-  count = var.create_cilium_cluster ? 1 : 0
+  count = var.create_appgtw ? 1 : 0
   
   name                = "pubip-lb-aks"
   resource_group_name = azurerm_resource_group.rg.name
@@ -10,7 +10,7 @@ resource "azurerm_public_ip" "pub_ip_lb" {
 }
 
 resource "azurerm_virtual_network" "appgtw_vnet" {
-  count = var.create_cilium_cluster ? 1 : 0
+  count = var.create_appgtw ? 1 : 0
 
   name                = "VNET-APPGTW"
   resource_group_name = azurerm_resource_group.rg.name
@@ -19,7 +19,7 @@ resource "azurerm_virtual_network" "appgtw_vnet" {
 }
 
 resource "azurerm_subnet" "appgtw_subnet" {
-  count = var.create_cilium_cluster ? 1 : 0
+  count = var.create_appgtw ? 1 : 0
 
   name                 = "ApplicationGatewaySubnet"
   resource_group_name  = azurerm_resource_group.rg.name
@@ -28,7 +28,7 @@ resource "azurerm_subnet" "appgtw_subnet" {
 }
 
 data "kubernetes_service" "kubenet_service" {
-  count = var.create_cilium_cluster ? 1 : 0
+  count = var.create_appgtw ? 1 : 0
 
   provider = kubernetes.kubenet
   metadata {
@@ -38,7 +38,7 @@ data "kubernetes_service" "kubenet_service" {
 }
 
 resource "azurerm_application_gateway" "appgtw" {
-  count = var.create_cilium_cluster ? 1 : 0
+  count = var.create_appgtw ? 1 : 0
 
   name                = "appgtw-aks"
   resource_group_name = azurerm_resource_group.rg.name
