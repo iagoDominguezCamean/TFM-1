@@ -4,10 +4,20 @@ terraform {
         source  = "hashicorp/azurerm"
         version = "~>4.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">=2.15.0"
+    }
   }
 }
 
 provider "azurerm" {
   features {}
   resource_provider_registrations = "none"
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = "/home/iagodc/.kube/config_cilium"
+  }
 }

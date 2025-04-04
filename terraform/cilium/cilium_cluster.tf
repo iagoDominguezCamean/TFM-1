@@ -26,16 +26,21 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   }
   
   network_profile {
-    network_plugin      = "azure"
-    network_data_plane  = "cilium"
-    network_plugin_mode = "overlay"
-    pod_cidr            = "10.10.0.0/22"
-    service_cidr        = "10.20.0.0/24"
-    dns_service_ip      = "10.20.0.10"
+    network_plugin      = "none"
+    # network_data_plane  = "cilium"
+    # network_plugin_mode = "overlay"
+    # pod_cidr            = "10.10.0.0/22"
+    # service_cidr        = "10.20.0.0/24"
+    # dns_service_ip      = "10.20.0.10"
   }
 
   identity {
     type = "SystemAssigned"
+  }
+
+  monitor_metrics {
+    # annotations_allowed = ""
+    # labels_allowed      = ""
   }
 }
 

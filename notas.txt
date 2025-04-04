@@ -1,0 +1,9 @@
+Preguntar a Roberto cuando me reincorpore y seguramente pedir permisos a Asier.
+
+que voy a poder ver por parte del cliente
+
+ver como de cargados están los clusters
+
+prometheus y grafana
+
+hacer pruebas de carga

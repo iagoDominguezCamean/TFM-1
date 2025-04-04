@@ -9,3 +9,9 @@ variable "location" {
   type        = string
   default     = "northeurope"
 }
+
+variable "install_cilium" {
+  description = "Control if install cilium or not."
+  type        = bool
+  default     = false
+}
