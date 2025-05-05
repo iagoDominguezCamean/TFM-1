@@ -11,6 +11,4 @@ terraform -chdir="terraform/cilium" apply --auto-approve -var="install_cilium=tr
 kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app1-pod-cilium.yaml
 kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app1-svc.yaml
 
-sleep 30
-
 terraform -chdir="terraform/appgtw" apply --auto-approve
