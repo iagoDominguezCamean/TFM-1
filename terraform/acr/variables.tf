@@ -48,10 +48,10 @@ variable "zone_redundancy_enabled" {
 
 variable "georeplications" {
   description = "(Optional) Map with georeplication locations."
-  type = object({
+  type = list(object({
     location                  = string
     regional_endpoint_enabled = bool
     zone_redundancy_enabled   = bool
-  })
-  default = {}
+  }))
+  default = []
 }
