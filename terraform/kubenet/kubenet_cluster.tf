@@ -4,36 +4,36 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_virtual_network" "vnet_kubenet" {
-  name                = "VNET-KUBENET"
+  name                = var.vnet_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
-  address_space       = [ "10.0.0.0/16" ]
+  address_space       = var.address_space
 }
 
 resource "azurerm_subnet" "kubenet_subnet" {
-  name                 = "kubenetSubnet"
+  name                 = var.subnet_name
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet_kubenet.name
-  address_prefixes     = ["10.0.0.0/24"]
+  address_prefixes     = var.address_prefixes
 }
 
 resource "azurerm_kubernetes_cluster" "k8s_cluster" {
-  name                = "aks-kubenet"
+  name                = var.name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "aks-idomingc-kubenet"
+  dns_prefix          = var.dns_prefix
 
   default_node_pool {
-    name           = "default"
-    vm_size        = "Standard_A2_v2"
-    node_count     = 2
+    name           = var.default_node_pool_name
+    vm_size        = var.vm_size
+    node_count     = var.node_count
     vnet_subnet_id = azurerm_subnet.kubenet_subnet.id
   }
 
   network_profile {
     network_plugin = "kubenet"
-    service_cidr   = "192.168.0.0/24"
-    dns_service_ip = "192.168.0.10"
+    service_cidr   = var.service_cidr
+    dns_service_ip = var.dns_service_ip
   }
 
   identity {

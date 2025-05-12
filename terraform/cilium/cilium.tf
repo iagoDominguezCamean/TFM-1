@@ -1,11 +1,11 @@
 resource "helm_release" "cilium" {
   count = var.install_cilium ? 1 : 0
-  
+
   name       = "cilium"
   repository = "https://helm.cilium.io/"
   chart      = "cilium"
-#   version    = "1.16.2"
-  namespace  = "kube-system"
+  # version    = "1.16.2"
+  namespace = "kube-system"
 
   set {
     name  = "aksbyocni.enabled"
@@ -17,10 +17,10 @@ resource "helm_release" "cilium" {
   }
   set {
     name  = "ipam.operator.clusterPoolIPv4PodCIDRList"
-    value = "10.10.0.0/22"
+    value = var.pod_cidr_list
   }
   set {
     name  = "hubble.relay.enabled"
-    value = "false"
+    value = var.hubble_relay_enabled
   }
 }

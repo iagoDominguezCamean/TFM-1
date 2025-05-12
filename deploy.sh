@@ -1,14 +1,45 @@
 #! /bin/sh
 
+echo "Creating Azure Container registry."
+terraform -chdir="terraform/acr" apply --auto-approve
+if [[$? -eq 0]]; then
+    echo "ACR created successfully!"
+else
+    echo "[ERROR] Creating Azure Container registry. Exiting!"
+    exit
+fi
+
+echo "Deploying kubenet cluster..."
 terraform -chdir="terraform/kubenet" apply --auto-approve
+if [[$? -eq 0]]; then
+    echo "Deployment successfull!"
+else
+    echo "[ERROR] Kubenet cluster deployment failure."
+fi
 
-kubectl apply -f k8s/app1-pod.yaml
-kubectl apply -f k8s/app1-svc.yaml
-
+echo "Deploying Cilium cluster..."
 terraform -chdir="terraform/cilium" apply --auto-approve
+
+if [[$? -eq 0]]; then
+    echo "Deployment successfull!"
+else
+    echo "[ERROR] Cilium cluster deployment failure."
+fi
+
+echo "Installing Cilium..."
 terraform -chdir="terraform/cilium" apply --auto-approve -var="install_cilium=true"
 
-kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app1-pod-cilium.yaml
-kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app1-svc.yaml
+if [[$? -eq 0]]; then
+    echo "Cilium installed successfully!"
+else
+    echo "[ERROR] Failure during Cilium installation!"
+fi
 
+echo "Deploying Application gateway..."
 terraform -chdir="terraform/appgtw" apply --auto-approve
+
+if [[$? -eq 0]]; then
+    echo "¡Deployment complete!"
+else
+    echo "[ERROR] Failure at Application gateway deployment."
+fi

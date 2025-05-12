@@ -1,24 +1,24 @@
 resource "azurerm_public_ip" "pub_ip_lb" {
-  name                = "pubip-appgtw"
+  name                = var.public_ip_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  allocation_method   = "Static"
-  sku                 = "Standard"
-  zones               = ["1", "2"]
+  allocation_method   = var.allocation_method
+  sku                 = var.public_ip_sku
+  zones               = var.public_ip_zones
 }
 
 resource "azurerm_virtual_network" "appgtw_vnet" {
-  name                = "VNET-APPGTW"
+  name                = var.vnet_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = ["10.0.0.0/16"]
+  address_space       = var.vnet_address_space
 }
 
 resource "azurerm_subnet" "appgtw_subnet" {
-  name                 = "ApplicationGatewaySubnet"
+  name                 = var.subnet_name
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.appgtw_vnet.name
-  address_prefixes     = ["10.0.0.0/24"]
+  address_prefixes     = var.subnet_address_prefixes
 }
 
 data "kubernetes_service" "kubenet_service" {
@@ -38,16 +38,16 @@ data "kubernetes_service" "cilium_service" {
 }
 
 resource "azurerm_application_gateway" "appgtw" {
-  name                = "appgtw-aks"
+  name                = var.name
   resource_group_name = var.resource_group_name
   location            = var.location
-  zones               = [ "1" ]
-  enable_http2        = true
-  
+  zones               = var.zones
+  enable_http2        = var.enable_http2
+
   sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2" 
-    capacity = 2
+    name     = var.sku_name
+    tier     = var.sku_tier
+    capacity = var.sku_capacity
   }
 
   gateway_ip_configuration {
@@ -67,7 +67,7 @@ resource "azurerm_application_gateway" "appgtw" {
 
   backend_address_pool {
     name  = local.backend_pool_name
-    fqdns = [ data.kubernetes_service.kubenet_service.status.0.load_balancer.0.ingress.0.ip, data.kubernetes_service.cilium_service.status.0.load_balancer.0.ingress.0.ip ]
+    fqdns = [data.kubernetes_service.kubenet_service.status.0.load_balancer.0.ingress.0.ip, data.kubernetes_service.cilium_service.status.0.load_balancer.0.ingress.0.ip]
   }
 
   backend_http_settings {
