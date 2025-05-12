@@ -19,7 +19,7 @@ variable "sku" {
 variable "name" {
   description = "Azure container registry name"
   type        = string
-  default     = "acr-aks"
+  default     = "acridomingc"
 }
 
 variable "admin_enabled" {
