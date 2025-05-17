@@ -23,7 +23,7 @@ else
 fi
 
 echo "Deploying Cilium cluster..."
-terraform -chdir="terraform/cilium" apply --auto-approve
+terraform -chdir="terraform/cilium_cluster" apply --auto-approve
 
 if [ $? -eq 0 ]; then
     echo "Deployment successfull!"
@@ -32,12 +32,12 @@ else
 fi
 
 echo "Installing Cilium..."
-terraform -chdir="terraform/cilium" apply --auto-approve -var="install_cilium=true"
+terraform -chdir="terraform/cilium_cluster_resources" apply --auto-approve
 
 if [ $? -eq 0 ]; then
-    echo "Cilium installed successfully!"
+    echo "Cilium and Nginx installed successfully!"
 else
-    echo "[ERROR] Failure during Cilium installation!"
+    echo "[ERROR] Failure during Cilium and Nginx installation!"
 fi
 
 echo "Deploying Application gateway..."

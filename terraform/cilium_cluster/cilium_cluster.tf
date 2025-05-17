@@ -2,14 +2,14 @@ resource "azurerm_virtual_network" "vnet_cilium" {
   name                = "VNET-CILIUM"
   resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = [ "10.1.0.0/16" ]
+  address_space       = ["10.1.0.0/16"]
 }
 
-resource "azurerm_subnet" "cilium_node_subnet" {  
+resource "azurerm_subnet" "cilium_node_subnet" {
   name                 = "CiliumNodeSubnet"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet_cilium.name
-  address_prefixes     = [ "10.1.0.0/24" ]
+  address_prefixes     = ["10.1.0.0/24"]
 }
 
 resource "azurerm_kubernetes_cluster" "k8s_cilium" {
@@ -24,14 +24,14 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
     vm_size        = "Standard_A2_v2"
     vnet_subnet_id = azurerm_subnet.cilium_node_subnet.id
   }
-  
+
   network_profile {
-    network_plugin      = "none"
-    # network_data_plane  = "cilium"
+    network_plugin = "none"
+    service_cidr   = "10.20.0.0/24"
+    dns_service_ip = "10.20.0.10"
+    # network_data_plane = "cilium"
     # network_plugin_mode = "overlay"
     # pod_cidr            = "10.10.0.0/22"
-    # service_cidr        = "10.20.0.0/24"
-    # dns_service_ip      = "10.20.0.10"
   }
 
   identity {
