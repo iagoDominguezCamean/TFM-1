@@ -27,7 +27,7 @@ kind: Service
 metadata:
   name: app1
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: app1
   ports:
