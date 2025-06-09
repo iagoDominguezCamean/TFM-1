@@ -4,17 +4,26 @@ metadata:
   name: ingress
   namespace: default
   annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     # nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-  - host: testapp.tfm.k8s.es
-    http:
+  - http:
       paths:
-      - path: /
+      - path: /app1
         pathType: Prefix
         backend:
           service:
             name: app1
+            port:
+              number: 80
+  - http:
+      paths:
+      - path: /app2
+        pathType: Prefix
+        backend:
+          service:
+            name: app2
             port:
               number: 80
