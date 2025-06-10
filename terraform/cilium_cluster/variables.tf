@@ -27,3 +27,9 @@ variable "enable_velero" {
   type        = bool
   default     = false
 }
+
+variable "acr_name" {
+  description = "value"
+  type        = string
+  default     = "acridomingc"
+}
