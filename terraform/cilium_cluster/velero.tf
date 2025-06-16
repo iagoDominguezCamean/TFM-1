@@ -12,7 +12,7 @@ resource "azurerm_storage_container" "container_velero" {
   count = var.enable_velero ? 1 : 0
 
   name                  = "velero"
-  storage_account_id    = azurerm_storage_account.sa_velero.id
+  storage_account_id    = azurerm_storage_account.sa_velero[0].id
   container_access_type = "private"
 
   depends_on = [azurerm_storage_account.sa_velero]

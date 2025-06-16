@@ -1,0 +1,59 @@
+configuration:
+  volumeSnapshotLocation:
+    - name: azure
+      provider: azure
+      config:
+        resourceGroup: 'idomingc'
+  backupStorageLocation:
+    - name: azure
+      provider: azure
+      bucket: 'velero'
+      default: true
+      config:
+        resourceGroup: 'idomingc'
+        storageAccount: savelerocilium
+  defaultRepoMaintainFrequency: 24h
+  repositoryMaintenanceJob:
+    latestJobsCount: 1
+  defaultVolumesToFsBackup: true
+  clientBurst: 200
+snapshotEnabled: true
+deployNodeAgent: true
+image:
+  repository: acridomingc.azurecr.io/velero/velero
+  tag: v1.14.0
+  pullPolicy: Always
+initContainers:
+  - name: velero-plugin-for-microsoft-azure
+    image: acridomingc.azurecr.io/velero/velero-plugin-for-microsoft-azure:v1.10.0
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+kubectl:
+  image:
+    repository: acridomingc.azurect.io/bitnami/kubectl
+    tag: 1.31
+configMaps:
+  fs-restore-action-config:
+    labels:
+      velero.io/plugin-config: ""
+      velero.io/pod-volume-restore: RestoreItemAction
+    data:
+      image: acridomingc.azurecr.io/velero/velero-restore-helper:v1.14.0
+nodeAgent:
+  tolerations:
+  - key:  "CriticalAddonsOnly"
+    operator: "Exists"
+schedules:
+  pro-backup:
+    disabled: false
+    schedule: "0  2 * * *"
+    template:
+      storageLocation: azure
+      ttl: "720h"
+nodeSelector:
+  kubernetes.azure.com/mode: system
+tolerations:
+  - key: "CriticalAddonsOnly"
+    operator: "Exists"
+    effect: "NoSchedule"
