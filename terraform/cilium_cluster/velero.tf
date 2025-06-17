@@ -6,7 +6,7 @@ resource "azurerm_storage_account" "sa_velero" {
   location                 = var.location
   account_replication_type = var.sa_velero_replication_type
   account_tier             = var.sa_velero_tier
-}
+}# Service endpoint para AKS y private endpoint si quiero
 
 resource "azurerm_storage_container" "container_velero" {
   count = var.enable_velero ? 1 : 0
