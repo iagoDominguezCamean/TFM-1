@@ -12,6 +12,7 @@ configuration:
       config:
         resourceGroup: 'idomingc'
         storageAccount: savelerocilium
+        storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_ACCESS_KEY
   defaultRepoMaintainFrequency: 24h
   repositoryMaintenanceJob:
     latestJobsCount: 1
@@ -40,10 +41,6 @@ configMaps:
       velero.io/pod-volume-restore: RestoreItemAction
     data:
       image: acridomingc.azurecr.io/velero/velero-restore-helper:v1.14.0
-nodeAgent:
-  tolerations:
-  - key:  "CriticalAddonsOnly"
-    operator: "Exists"
 schedules:
   pro-backup:
     disabled: false
@@ -53,7 +50,3 @@ schedules:
       ttl: "720h"
 nodeSelector:
   kubernetes.azure.com/mode: system
-tolerations:
-  - key: "CriticalAddonsOnly"
-    operator: "Exists"
-    effect: "NoSchedule"

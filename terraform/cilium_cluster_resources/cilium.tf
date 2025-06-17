@@ -1,4 +1,4 @@
-resource "helm_release" "cilium" {
+resource "helm_release" "cilium" { # Mover a CILIUM_CLUSTER
   name       = "cilium"
   repository = "https://helm.cilium.io/"
   chart      = "cilium"
