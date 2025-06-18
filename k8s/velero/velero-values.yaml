@@ -32,7 +32,7 @@ initContainers:
         name: plugins
 kubectl:
   image:
-    repository: acridomingc.azurect.io/bitnami/kubectl
+    repository: acridomingc.azurecr.io/bitnami/kubectl
     tag: 1.31
 configMaps:
   fs-restore-action-config:

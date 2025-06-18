@@ -16,15 +16,3 @@ variable "install_cilium" {
   type        = bool
   default     = false
 }
-
-variable "pod_cidr_list" {
-  description = "value"
-  type        = string
-  default     = "10.10.0.0/22"
-}
-
-variable "hubble_relay_enabled" {
-  description = "value"
-  type        = string
-  default     = "false"
-}
