@@ -11,8 +11,14 @@ variable "location" {
 }
 
 # Cilium CNI Helm
-variable "install_cilium" {
-  description = "Control if install cilium or not."
-  type        = bool
-  default     = false
+variable "pod_cidr_list" {
+  description = "Pod CIDR address"
+  type        = string
+  default     = "10.10.0.0/22"
+}
+
+variable "hubble_relay_enabled" {
+  description = "True to enable hubble."
+  type        = string
+  default     = "false"
 }

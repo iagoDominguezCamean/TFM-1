@@ -33,15 +33,3 @@ variable "acr_name" {
   type        = string
   default     = "acridomingc"
 }
-
-variable "pod_cidr_list" {
-  description = "Pod CIDR address"
-  type        = string
-  default     = "10.10.0.0/22"
-}
-
-variable "hubble_relay_enabled" {
-  description = "True to enable hubble."
-  type        = string
-  default     = "false"
-}
