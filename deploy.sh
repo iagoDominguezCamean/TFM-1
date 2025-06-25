@@ -40,6 +40,22 @@ else
     echo "[ERROR] Failure during Cilium and Nginx installation!"
 fi
 
+echo "Installing Ingress Nginx controller in Kubenet cluster..."
+az aks approuting enabled --resource-group idomingc --name aks-kubenet
+if [ $? -eq 0 ]; then
+    echo "Ingress Nginx controller installed successfully!"
+else
+    echo "[ERROR] Somethig went wrong during nginx installation in Kubenet cluster..."
+fi
+
+echo "Installing Ingress Nginx controller in Cilium cluster..."
+az aks approuting enabled --resource-group idomingc --name aks-cilium
+if [ $? -eq 0 ]; then
+    echo "Ingress Nginx controller installed successfully!"
+else
+    echo "[ERROR] Somethig went wrong during nginx installation in Cilium cluster..."
+fi
+
 echo "Deploying Application gateway..."
 terraform -chdir="terraform/appgtw" apply --auto-approve
 
