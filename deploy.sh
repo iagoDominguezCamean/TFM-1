@@ -1,5 +1,10 @@
 #! /bin/sh
 
+# Control variables
+KUBENET_ERROR=0
+CILIUM_ERROR=0
+
+# Download the required providers and modules for Terraform.
 terraform -chdir="terraform/acr" init
 terraform -chdir="terraform/kubenet" init
 terraform -chdir="terraform/cilium" init
@@ -20,6 +25,7 @@ if [ $? -eq 0 ]; then
     echo "Deployment successfull!"
 else
     echo "[ERROR] Kubenet cluster deployment failure."
+    KUBENET_ERROR=1
 fi
 
 echo "Deploying Cilium cluster..."
@@ -29,15 +35,20 @@ if [ $? -eq 0 ]; then
     echo "Deployment successfull!"
 else
     echo "[ERROR] Cilium cluster deployment failure."
+    CILIUM_ERROR=1
 fi
 
-echo "Installing Cilium..."
-terraform -chdir="terraform/cilium_cluster_resources" apply --auto-approve
+if [ $CILIUM_ERROR -eq 0 ];then
+    echo "Installing Cilium..."
+    terraform -chdir="terraform/cilium_cluster_resources" apply --auto-approve
 
-if [ $? -eq 0 ]; then
-    echo "Cilium and Nginx installed successfully!"
+    if [ $? -eq 0 ]; then
+        echo "Cilium and Nginx installed successfully!"
+    else
+        echo "[ERROR] Failure during Cilium and Nginx installation!"
+    fi
 else
-    echo "[ERROR] Failure during Cilium and Nginx installation!"
+    echo "Cilium cluster has failed. Skiping cilium installation on cilium cluster."
 fi
 
 echo "Installing Ingress Nginx controller in Kubenet cluster..."
