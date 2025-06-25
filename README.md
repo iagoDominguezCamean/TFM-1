@@ -1,5 +1,5 @@
 # TFM
-Migrate the applications in a AKS cluster that uses Kubenet as CNI to a AKS cluster that runs Cilium as CNI managed by the user. 
+Migrate the applications in an AKS cluster that uses Kubenet as CNI to an AKS cluster that runs Cilium as CNI managed by the user. 
 
 ## Prerequisites
 - Helm
