@@ -37,7 +37,7 @@ resource "azurerm_kubernetes_cluster" "k8s_cluster" {
 }
 
 resource "local_file" "kube_config" {
-  filename        = "/home/iagodc/.kube/config"
+  filename        = "/home/iagodc/.kube/config_kubenet"
   content         = azurerm_kubernetes_cluster.k8s_cluster.kube_config_raw
   file_permission = "0640"
 }
