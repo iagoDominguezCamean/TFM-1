@@ -4,12 +4,13 @@ metadata:
   name: ingress
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    # nginx.ingress.kubernetes.io/rewrite-target: /
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx
+  ingressClassName: webapprouting.kubernetes.azure.com
   rules:
-  - http:
+  - host: app1.k8s.es
+    http:
       paths:
       - path: /app1
         pathType: Prefix
@@ -18,7 +19,8 @@ spec:
             name: app1
             port:
               number: 80
-  - http:
+  - host: app1.k8s.es
+    http:
       paths:
       - path: /app2
         pathType: Prefix

@@ -12,17 +12,17 @@ resource "azurerm_subnet" "cilium_node_subnet" {
   address_prefixes     = ["10.1.0.0/24"]
 }
 
-resource "azurerm_user_assigned_identity" "aks_uami" {
-  resource_group_name = var.resource_group_name
-  name                = "aks-cluster-uami"
-  location            = var.location
-}
+# resource "azurerm_user_assigned_identity" "aks_uami" {
+#   resource_group_name = var.resource_group_name
+#   name                = "aks-cluster-uami"
+#   location            = var.location
+# }
 
-resource "azurerm_user_assigned_identity" "kubelet_uami" {
-  resource_group_name = var.resource_group_name
-  name                = "aks-kubelet-uami"
-  location            = var.location
-}
+# resource "azurerm_user_assigned_identity" "kubelet_uami" {
+#   resource_group_name = var.resource_group_name
+#   name                = "aks-kubelet-uami"
+#   location            = var.location
+# }
 
 resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   name                = "aks-cilium"
@@ -47,12 +47,7 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   }
 
   identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.kubelet_uami.id, azurerm_user_assigned_identity.aks_uami.id]
-  }
-
-  kubelet_identity {
-    client_id = azurerm_user_assigned_identity.kubelet_uami.client_id
+    type         = "SystemAssigned"
   }
 
   monitor_metrics {

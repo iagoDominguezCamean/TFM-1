@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: testapp-deployment
+  name: testapp-deployment02
   labels:
     app: testApp
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: app1
+      app: app2
   template:
     metadata:
       labels:
-        app: app1
+        app: app2
     spec:
       containers:
-      - name: app1
+      - name: app2
         image: hashicorp/http-echo:0.2.3
         args:
           - "-text=Hello, I'm using Cilium"
@@ -25,10 +25,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app1
+  name: app2
 spec:
   type: ClusterIP
   selector:
-    app: app1
+    app: app2
   ports:
     - port: 80

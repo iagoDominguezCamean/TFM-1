@@ -18,7 +18,7 @@ spec:
       - name: app1
         image: hashicorp/http-echo:0.2.3
         args:
-          - "-text=Hello, I'm using Cilium"
+          - "-text=Hello, I'm using Kubenet"
           - "-listen=:80"
 ---
 # Service
