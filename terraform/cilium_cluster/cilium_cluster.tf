@@ -12,6 +12,18 @@ resource "azurerm_subnet" "cilium_node_subnet" {
   address_prefixes     = ["10.1.0.0/24"]
 }
 
+resource "azurerm_user_assigned_identity" "aks_uami" {
+  resource_group_name = var.resource_group_name
+  name                = "aks-cluster-uami"
+  location            = var.location
+}
+
+resource "azurerm_user_assigned_identity" "kubelet_uami" {
+  resource_group_name = var.resource_group_name
+  name                = "aks-kubelet-uami"
+  location            = var.location
+}
+
 resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   name                = "aks-cilium"
   resource_group_name = var.resource_group_name
@@ -35,7 +47,12 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.kubelet_uami.id, azurerm_user_assigned_identity.aks_uami.id]
+  }
+
+  kubelet_identity {
+    client_id = azurerm_user_assigned_identity.kubelet_uami.client_id
   }
 
   monitor_metrics {
@@ -53,5 +70,7 @@ resource "local_file" "kube_config_cilium" {
 resource "azurerm_role_assignment" "acr_pull" {
   scope                = data.azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
-  principal_id         = azurerm_kubernetes_cluster.k8s_cilium.identity[0].principal_id
+  principal_id         = azurerm_kubernetes_cluster.k8s_cilium.kubelet_identity[0].object_id
+
+  depends_on = [azurerm_kubernetes_cluster.k8s_cilium]
 }
