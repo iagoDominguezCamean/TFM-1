@@ -22,11 +22,3 @@ resource "helm_release" "cilium" {
     value = var.hubble_relay_enabled
   }
 }
-
-# resource "helm_release" "ingress-nginx" {
-#   name             = "ingress-nginx"
-#   repository       = "https://kubernetes.github.io/ingress-nginx"
-#   chart            = "ingress-nginx"
-#   namespace        = "ingress-nginx"
-#   create_namespace = true
-# }
