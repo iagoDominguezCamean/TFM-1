@@ -4,7 +4,6 @@ metadata:
   name: ingress
   namespace: default
   annotations:
-    #nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
