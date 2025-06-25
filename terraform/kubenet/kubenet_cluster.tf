@@ -41,3 +41,11 @@ resource "local_file" "kube_config" {
   content         = azurerm_kubernetes_cluster.k8s_cluster.kube_config_raw
   file_permission = "0640"
 }
+
+resource "azurerm_role_assignment" "acr_pull" {
+  scope                = data.azurerm_container_registry.acr.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_kubernetes_cluster.k8s_cluster.kubelet_identity[0].object_id
+
+  depends_on = [azurerm_kubernetes_cluster.k8s_cluster]
+}
