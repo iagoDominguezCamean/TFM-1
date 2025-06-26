@@ -9,5 +9,5 @@ if [ $cluster == "kubenet" ]; then
     kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/app01/cilium-deployment.yaml
 elif [ $cluster == "cilium" ]; then
     echo "Deploying app insto Cilium cluster..."
-    kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app02/cilium-deployment.yaml
+    kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app01c/cilium-deployment.yaml
 fi
