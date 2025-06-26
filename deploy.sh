@@ -7,7 +7,8 @@ CILIUM_ERROR=0
 # Download the required providers and modules for Terraform.
 terraform -chdir="terraform/acr" init
 terraform -chdir="terraform/kubenet" init
-terraform -chdir="terraform/cilium" init
+terraform -chdir="terraform/cilium_cluster" init
+terraform -chdir="terraform/cilium_cluster_resources" init
 terraform -chdir="terraform/appgtw" init
 
 echo "Creating Azure Container registry."
@@ -52,7 +53,7 @@ else
 fi
 
 echo "Installing Ingress Nginx controller in Kubenet cluster..."
-az aks approuting enabled --resource-group idomingc --name aks-kubenet
+az aks approuting enable --resource-group idomingc --name aks-kubenet
 if [ $? -eq 0 ]; then
     echo "Ingress Nginx controller installed successfully!"
 else
@@ -60,7 +61,7 @@ else
 fi
 
 echo "Installing Ingress Nginx controller in Cilium cluster..."
-az aks approuting enabled --resource-group idomingc --name aks-cilium
+az aks approuting enable --resource-group idomingc --name aks-cilium
 if [ $? -eq 0 ]; then
     echo "Ingress Nginx controller installed successfully!"
 else

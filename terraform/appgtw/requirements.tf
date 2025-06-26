@@ -1,8 +1,8 @@
 terraform {
   required_providers {
     azurerm = {
-        source  = "hashicorp/azurerm"
-        version = "~>4.0"
+      source  = "hashicorp/azurerm"
+      version = "~>4.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -18,7 +18,7 @@ provider "azurerm" {
 
 provider "kubernetes" {
   alias       = "kubenet"
-  config_path = "/home/iagodc/.kube/config"
+  config_path = "/home/iagodc/.kube/config_kubenet"
 }
 
 provider "kubernetes" {

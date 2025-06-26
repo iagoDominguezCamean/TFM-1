@@ -21,22 +21,6 @@ resource "azurerm_subnet" "appgtw_subnet" {
   address_prefixes     = var.subnet_address_prefixes
 }
 
-data "kubernetes_service" "kubenet_service" {
-  provider = kubernetes.kubenet
-  metadata {
-    name      = "app1"
-    namespace = "default"
-  }
-}
-
-data "kubernetes_service" "cilium_service" {
-  provider = kubernetes.cilium
-  metadata {
-    name      = "app1"
-    namespace = "default"
-  }
-}
-
 resource "azurerm_application_gateway" "appgtw" {
   name                = var.name
   resource_group_name = var.resource_group_name

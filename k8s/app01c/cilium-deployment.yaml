@@ -8,14 +8,14 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: app2
+      app: app1
   template:
     metadata:
       labels:
-        app: app2
+        app: app1
     spec:
       containers:
-      - name: app2
+      - name: app1
         image: hashicorp/http-echo:0.2.3
         args:
           - "-text=Hello, I'm using Cilium"
@@ -25,10 +25,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app2
+  name: app1
 spec:
   type: ClusterIP
   selector:
-    app: app2
+    app: app1
   ports:
     - port: 80
