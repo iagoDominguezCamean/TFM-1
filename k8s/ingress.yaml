@@ -18,13 +18,13 @@ spec:
             name: app1
             port:
               number: 80
-  - host: app1.k8s.es
+  - host: wordpress.k8s.es
     http:
       paths:
-      - path: /app2
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: app2
+            name: wordpress
             port:
               number: 80

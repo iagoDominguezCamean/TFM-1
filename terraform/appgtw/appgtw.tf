@@ -59,6 +59,7 @@ resource "azurerm_application_gateway" "appgtw" {
     port                  = 80
     protocol              = "Http"
     cookie_based_affinity = "Disabled"
+    probe_name            = local.probe_name
   }
 
   http_listener {
@@ -75,5 +76,16 @@ resource "azurerm_application_gateway" "appgtw" {
     backend_address_pool_name  = local.backend_pool_name
     backend_http_settings_name = local.backend_http_settings_name
     priority                   = 100
+  }
+
+  probe {
+    name                = local.probe_name
+    protocol            = "Http"
+    timeout             = 180
+    unhealthy_threshold = 15
+    interval            = 2
+    path                = "/app1"
+    host                = "app1.k8s.es"
+
   }
 }
