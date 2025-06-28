@@ -9,5 +9,5 @@ prometheus y grafana
 hacer pruebas de carga
 
 docker hub PAT dckr_pat_mFOCHudTv8-75FGN4QoV3Nwmt-g
-az acr import -n acridomingc --source docker.io/bitnami/mariadb:11.8.2-debian-12-r2 --force --username iagodc29 --password dckr_pat_mFOCHudTv8-75FGN4QoV3Nwmt-g
-az acr import -n acridomingc --source docker.io/bitnami/wordpress:6.8.1-debian-12-r8 --force --username iagodc29 --password dckr_pat_mFOCHudTv8-75FGN4QoV3Nwmt-g
+az acr import -n acridomingc --source docker.io/bitnami/mysql:9.3.0 --force --username iagodc29 --password dckr_pat_mFOCHudTv8-75FGN4QoV3Nwmt-g
+az acr import -n acridomingc --source docker.io/bitnami/wordpress:6.8.1 --force --username iagodc29 --password dckr_pat_mFOCHudTv8-75FGN4QoV3Nwmt-g
