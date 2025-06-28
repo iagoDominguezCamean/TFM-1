@@ -42,3 +42,4 @@ terraform.rc
 
 /values.yaml
 /credentials-velero
+.env

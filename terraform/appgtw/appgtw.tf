@@ -86,6 +86,5 @@ resource "azurerm_application_gateway" "appgtw" {
     interval            = 2
     path                = "/app1"
     host                = "app1.k8s.es"
-
   }
 }
