@@ -25,7 +25,7 @@ variable "sa_velero_tier" {
 variable "enable_velero" {
   description = "True to enable velero"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "acr_name" {
