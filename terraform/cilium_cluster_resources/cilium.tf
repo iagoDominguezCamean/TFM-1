@@ -38,13 +38,16 @@ resource "helm_release" "cilium" {
     value = "true"
   }
   set {
-    name  = "prometheus.port"
-    value = "9962"
-  }
-  set {
     name  = "operator.prometheus.enabled"
     value = "true"
   }
+  set {
+    name = "hubble.ui.enabled"
+    value = "true"
+  }
+    values = [
+      file("../../k8s/scrape_config.yaml")
+    ]
 }
 
 resource "random_password" "grafana_password" {

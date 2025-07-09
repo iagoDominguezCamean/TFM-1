@@ -20,5 +20,5 @@ variable "pod_cidr_list" {
 variable "hubble_relay_enabled" {
   description = "True to enable hubble."
   type        = string
-  default     = "false"
+  default     = "true"
 }
