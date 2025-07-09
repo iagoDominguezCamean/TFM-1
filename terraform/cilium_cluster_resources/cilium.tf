@@ -42,12 +42,12 @@ resource "helm_release" "cilium" {
     value = "true"
   }
   set {
-    name = "hubble.ui.enabled"
+    name  = "hubble.ui.enabled"
     value = "true"
   }
-    values = [
-      file("../../k8s/scrape_config.yaml")
-    ]
+  values = [
+    file("../../k8s/scrape_config.yaml")
+  ]
 }
 
 resource "random_password" "grafana_password" {

@@ -25,7 +25,7 @@ variable "name" {
 variable "admin_enabled" {
   description = "(Optional) Specifies whether the admin user is enabled. Defaults to false.value"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "public_network_access_enabled" {
