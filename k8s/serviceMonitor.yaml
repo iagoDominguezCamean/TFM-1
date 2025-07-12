@@ -66,7 +66,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      meta.helm.sh/release-name: cilium
+      k8s-app: hubble-relay
   namespaceSelector:
     matchNames:
       - kube-system
