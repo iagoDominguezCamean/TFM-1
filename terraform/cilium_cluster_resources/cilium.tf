@@ -22,6 +22,14 @@ resource "helm_release" "cilium" {
     value = var.hubble_relay_enabled
   }
   set {
+    name  = "hubble.relay.prometheus.enabled"
+    value = "true"
+  }
+  set {
+    name  = "hubble.relay.prometheus.serviceMonitor.enabled"
+    value = "true"
+  }
+  set {
     name  = "hubble.enabled"
     value = "true"
   }
@@ -34,7 +42,15 @@ resource "helm_release" "cilium" {
     value = "true"
   }
   set {
+    name  = "hubble.metrics.serviceMonitor.enabled"
+    value = "true"
+  }
+  set {
     name  = "prometheus.enabled"
+    value = "true"
+  }
+  set {
+    name  = "prometheus.serviceMonitor.enabled"
     value = "true"
   }
   set {
@@ -42,12 +58,13 @@ resource "helm_release" "cilium" {
     value = "true"
   }
   set {
+    name  = "operator.prometheus.serviceMonitor.enabled"
+    value = "true"
+  }
+  set {
     name  = "hubble.ui.enabled"
     value = "true"
   }
-  values = [
-    file("../../k8s/scrape_config.yaml")
-  ]
 }
 
 resource "random_password" "grafana_password" {
@@ -71,4 +88,7 @@ resource "helm_release" "kube-prometheus-stack" {
     name  = "grafana.adminPassword"
     value = "admin"
   }
+  # values = [
+  #   file("../../k8s/scrape_config.yaml")
+  # ]
 }
