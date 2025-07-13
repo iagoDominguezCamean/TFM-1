@@ -12,18 +12,6 @@ resource "azurerm_subnet" "cilium_node_subnet" {
   address_prefixes     = ["10.1.0.0/24"]
 }
 
-# resource "azurerm_user_assigned_identity" "aks_uami" {
-#   resource_group_name = var.resource_group_name
-#   name                = "aks-cluster-uami"
-#   location            = var.location
-# }
-
-# resource "azurerm_user_assigned_identity" "kubelet_uami" {
-#   resource_group_name = var.resource_group_name
-#   name                = "aks-kubelet-uami"
-#   location            = var.location
-# }
-
 resource "azurerm_kubernetes_cluster" "k8s_cilium" {
   name                = "aks-cilium"
   resource_group_name = var.resource_group_name
@@ -41,18 +29,14 @@ resource "azurerm_kubernetes_cluster" "k8s_cilium" {
     network_plugin = "none"
     service_cidr   = "10.20.0.0/24"
     dns_service_ip = "10.20.0.10"
-    # network_data_plane = "cilium"
-    # network_plugin_mode = "overlay"
-    # pod_cidr            = "10.10.0.0/22"
   }
 
   identity {
-    type         = "SystemAssigned"
+    type = "SystemAssigned"
   }
 
-  monitor_metrics {
-    # annotations_allowed = ""
-    # labels_allowed      = ""
+  lifecycle {
+    ignore_changes = [web_app_routing]
   }
 }
 

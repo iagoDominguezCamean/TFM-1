@@ -1,5 +1,8 @@
 #! /bin/sh
 
+# Positional parameters
+# 1 -> Firts parameter values are 'true' or 'false' to enable monitoring in the Cilium cluster.
+
 # Control variables
 KUBENET_ERROR=0
 CILIUM_ERROR=0
@@ -47,25 +50,39 @@ if [ $CILIUM_ERROR -eq 0 ];then
         echo "Cilium and Nginx installed successfully!"
     else
         echo "[ERROR] Failure during Cilium and Nginx installation!"
+        CILIUM_ERROR=1
     fi
 else
     echo "Cilium cluster has failed. Skiping cilium installation on cilium cluster."
 fi
 
-echo "Installing Ingress Nginx controller in Kubenet cluster..."
-az aks approuting enable --resource-group idomingc --name aks-kubenet
-if [ $? -eq 0 ]; then
-    echo "Ingress Nginx controller installed successfully!"
+if [ $KUBENET_ERROR -eq 0 ]; then
+    echo "Installing Ingress Nginx controller in Kubenet cluster..."
+    az aks approuting enable --resource-group idomingc --name aks-kubenet
+    if [ $? -eq 0 ]; then
+        echo "Ingress Nginx controller installed successfully!"
+    else
+        echo "[ERROR] Somethig went wrong during nginx installation in Kubenet cluster..."
+    fi
 else
-    echo "[ERROR] Somethig went wrong during nginx installation in Kubenet cluster..."
+    echo "Kubenet failed. Skipping ingress..."
 fi
 
-echo "Installing Ingress Nginx controller in Cilium cluster..."
-az aks approuting enable --resource-group idomingc --name aks-cilium
-if [ $? -eq 0 ]; then
-    echo "Ingress Nginx controller installed successfully!"
+if [ $CILIUM_ERROR -eq 0 ]; then
+    echo "Installing Ingress Nginx controller in Cilium cluster..."
+    az aks approuting enable --resource-group idomingc --name aks-cilium
+    if [ $? -eq 0 ]; then
+        echo "Ingress Nginx controller installed successfully!"
+    else
+        echo "[ERROR] Somethig went wrong during nginx installation in Cilium cluster..."
+    fi
+    
+    echo "Enabling monitoring on the Cilium cluster..."
+    terraform -chdir="terraform/cilium_cluster_resources" apply --auto-approve -var-file="tfvars/monitoring.tfvars"
+    echo "Adding the Service Monitors for Cilium and Hubble resources..."
+    kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/serviceMonitor.yaml
 else
-    echo "[ERROR] Somethig went wrong during nginx installation in Cilium cluster..."
+    echo "Cilium cluster failed. Skipping configuration..."
 fi
 
 echo "Deploying Application gateway..."

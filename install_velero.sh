@@ -1,38 +1,40 @@
 #! /bin/bash
 echo "Velero Installation"
 
+source .env
+
 helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
 
 echo "Import images from dockerhub"
 
-EXISTS=$(az acr repository show --name acridomingc --image velero/velero:v1.14.0 || echo "Import")
+EXISTS=$(az acr repository show --name $ACR --image velero/velero:v1.14.0 || echo "Import")
 if [ "$EXISTS" = "Import" ]; then
-    echo "Importing velero image"
-    az acr import -n acridomingc --source docker.io/velero/velero:v1.14.0 --force --username iagodc29 --password ZQle5K5km%3g!m
+    echo "Importing velero:v1.14.0 image"
+    az acr import -n $ACR --source docker.io/velero/velero:v1.14.0 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
 else
     echo "The velero image exists. Skipping."
 fi
 
-EXISTS=$(az acr repository show --name acridomingc --image velero/velero-plugin-for-microsoft-azure:v1.10.0 || echo "Import")
+EXISTS=$(az acr repository show --name $ACR --image velero/velero-plugin-for-microsoft-azure:v1.10.0 || echo "Import")
 if [ "$EXISTS" = "Import" ]; then
-    echo "Importing velero-plugin-for-microsoft-azure image"
-    az acr import -n acridomingc --source docker.io/velero/velero-plugin-for-microsoft-azure:v1.10.0 --force --username iagodc29 --password ZQle5K5km%3g!m
+    echo "Importing velero-plugin-for-microsoft-azure:v1.10.0 image"
+    az acr import -n $ACR --source docker.io/velero/velero-plugin-for-microsoft-azure:v1.10.0 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
 else
     echo "The velero-plugin-for-microsoft-azure image exists. Skipping."
 fi
 
-EXISTS=$(az acr repository show --name acridomingc --image bitnami/kubectl:1.31 || echo "Import")
+EXISTS=$(az acr repository show --name $ACR --image bitnami/kubectl:1.31 || echo "Import")
 if [ "$EXISTS" = "Import" ]; then
-    echo "Importing velero-plugin-for-microsoft-azure image"
-    az acr import -n acridomingc --source docker.io/bitnami/kubectl:1.31 --force --username iagodc29 --password ZQle5K5km%3g!m
+    echo "Importing kubectl:1.31 image"
+    az acr import -n $ACR --source docker.io/bitnami/kubectl:1.31 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
 else
     echo "The kubectl image exists. Skipping."
 fi
 
-EXISTS=$(az acr repository show --name acridomingc --image velero/velero-restore-helper:v1.14.0 || echo "Import")
+EXISTS=$(az acr repository show --name $ACR --image velero/velero-restore-helper:v1.14.0 || echo "Import")
 if [ "$EXISTS" = "Import" ]; then
-    echo "Importing velero-plugin-for-microsoft-azure image"
-    az acr import -n acridomingc --source docker.io/velero/velero-restore-helper:v1.14.0 --force --username iagodc29 --password ZQle5K5km%3g!m
+    echo "Importing velero-restore-helper:v1.14.0 image"
+    az acr import -n $ACR --source docker.io/velero/velero-restore-helper:v1.14.0 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
 else
     echo "The velero-restore-helper image exists. Skipping."
 fi

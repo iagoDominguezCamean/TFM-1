@@ -55,3 +55,9 @@ variable "georeplications" {
   }))
   default = []
 }
+
+variable "kv_name" {
+  description = "Name of the key vault"
+  type        = string
+  default     = "kv-idomingc-tfm"
+}

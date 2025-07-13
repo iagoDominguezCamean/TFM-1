@@ -5,70 +5,23 @@ resource "helm_release" "cilium" {
   # version    = "1.16.2"
   namespace = "kube-system"
 
-  set {
-    name  = "aksbyocni.enabled"
-    value = "true"
-  }
-  set {
-    name  = "nodeinit.enabled"
-    value = "true"
-  }
-  set {
-    name  = "ipam.operator.clusterPoolIPv4PodCIDRList"
-    value = var.pod_cidr_list
-  }
-  set {
-    name  = "hubble.relay.enabled"
-    value = var.hubble_relay_enabled
-  }
-  set {
-    name  = "hubble.relay.prometheus.enabled"
-    value = "true"
-  }
-  set {
-    name  = "hubble.relay.prometheus.serviceMonitor.enabled"
-    value = "true"
-  }
-  set {
-    name  = "hubble.enabled"
-    value = "true"
-  }
-  set {
-    name  = "hubble.metrics.enabled"
-    value = "{dns,drop,tcp,flow,port-distribution,icmp,http}"
-  }
-  set {
-    name  = "hubble.metrics.enableOpenMetrics"
-    value = "true"
-  }
-  set {
-    name  = "hubble.metrics.serviceMonitor.enabled"
-    value = "true"
-  }
-  set {
-    name  = "prometheus.enabled"
-    value = "true"
-  }
-  set {
-    name  = "prometheus.serviceMonitor.enabled"
-    value = "true"
-  }
-  set {
-    name  = "operator.prometheus.enabled"
-    value = "true"
-  }
-  set {
-    name  = "operator.prometheus.serviceMonitor.enabled"
-    value = "true"
-  }
-  set {
-    name  = "hubble.ui.enabled"
-    value = "true"
+  dynamic "set" {
+    for_each = local.cilium_config
+
+    content {
+      name  = set.value.name
+      value = set.value.value
+    }
   }
 }
 
 resource "random_password" "grafana_password" {
   length = 14
+}
+
+resource "random_string" "grafana_adminuser" {
+  length  = 14
+  special = false
 }
 
 # Prometheus and Grafana install
@@ -81,14 +34,25 @@ resource "helm_release" "kube-prometheus-stack" {
 
   set {
     name  = "grafana.adminUser"
-    value = "admin"
+    value = random_string.grafana_adminuser.result
   }
 
   set {
     name  = "grafana.adminPassword"
-    value = "admin"
+    value = random_password.grafana_password.result
   }
-  # values = [
-  #   file("../../k8s/scrape_config.yaml")
-  # ]
+
+  depends_on = [helm_release.cilium]
+}
+
+resource "azurerm_key_vault_secret" "grafana_admin_passwd" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+  name         = "grafana-admin-passwd"
+  value        = random_password.grafana_password.result
+}
+
+resource "azurerm_key_vault_secret" "grafana_admin_username" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+  name         = "grafana-admin-username"
+  value        = random_string.grafana_adminuser.result
 }

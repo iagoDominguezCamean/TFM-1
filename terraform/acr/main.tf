@@ -23,3 +23,20 @@ resource "azurerm_container_registry" "acr" {
     }
   }
 }
+
+resource "azurerm_key_vault" "kv" {
+  name                      = var.kv_name
+  resource_group_name       = azurerm_resource_group.rg.name
+  location                  = var.location
+  tenant_id                 = data.azurerm_client_config.current.tenant_id
+  sku_name                  = "standard"
+  enable_rbac_authorization = true
+}
+
+resource "azurerm_role_assignment" "kv_roles" {
+  for_each = toset(["Key Vault Secrets Officer", "Key Vault Crypto Officer", "Key Vault Certificates Officer"])
+
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = each.value
+  principal_id         = data.azurerm_client_config.current.object_id
+}

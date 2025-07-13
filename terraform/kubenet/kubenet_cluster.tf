@@ -34,6 +34,10 @@ resource "azurerm_kubernetes_cluster" "k8s_cluster" {
   identity {
     type = "SystemAssigned"
   }
+
+  lifecycle {
+    ignore_changes = [web_app_routing]
+  }
 }
 
 resource "local_file" "kube_config" {
