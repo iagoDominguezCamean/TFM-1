@@ -1,8 +1,5 @@
 #! /bin/sh
 
-# Positional parameters
-# 1 -> Firts parameter values are 'true' or 'false' to enable monitoring in the Cilium cluster.
-
 # Control variables
 KUBENET_ERROR=0
 CILIUM_ERROR=0
