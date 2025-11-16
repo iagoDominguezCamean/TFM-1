@@ -97,4 +97,17 @@ variable "subnet_address_prefixes" {
   default     = ["10.0.0.0/24"]
 }
 
+variable "probes" {
+  description = "Map with probes to be defined"
+  type = map(object({
+    protocol            = optional(string, "Http")
+    timeout             = optional(number, 180)
+    unhealthy_threshold = optional(number, 15)
+    interval            = optional(number, 2)
+    path                = string
+    host                = string
+  }))
+  default = {}
+}
+
 # Kubernetes services

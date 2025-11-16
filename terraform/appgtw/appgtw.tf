@@ -78,13 +78,17 @@ resource "azurerm_application_gateway" "appgtw" {
     priority                   = 100
   }
 
-  probe {
-    name                = local.probe_name
-    protocol            = "Http"
-    timeout             = 180
-    unhealthy_threshold = 15
-    interval            = 2
-    path                = "/app1"
-    host                = "app1.k8s.es"
+  dynamic "probe" {
+    for_each = local.probes
+
+    content {
+      name                = probe.key
+      protocol            = probe.value.protocol
+      timeout             = probe.value.timeout
+      unhealthy_threshold = probe.value.unhealthy_threshold
+      interval            = probe.value.interval
+      path                = probe.value.path
+      host                = probe.value.host
+    }
   }
 }

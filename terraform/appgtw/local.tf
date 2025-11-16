@@ -7,4 +7,15 @@ locals {
   http_listener_name             = "http_listener"
   rule_name                      = "rule01"
   probe_name                     = "hp01"
+
+  probes = {
+    "hp01" = {
+      protocol            = "Http"
+      timeout             = 180
+      unhealthy_threshold = 15
+      interval            = 2
+      path                = "/app1"
+      host                = "app1.k8s.es"
+    }
+  }
 }
