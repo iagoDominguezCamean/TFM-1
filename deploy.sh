@@ -7,6 +7,7 @@ CILIUM_ERROR=0
 # Download the required providers and modules for Terraform.
 terraform -chdir="terraform/acr" init
 terraform -chdir="terraform/kubenet" init
+terraform -chdir="terraform/kubenet_resources" init
 terraform -chdir="terraform/cilium_cluster" init
 terraform -chdir="terraform/cilium_cluster_resources" init
 terraform -chdir="terraform/appgtw" init
@@ -27,6 +28,17 @@ if [ $? -eq 0 ]; then
 else
     echo "[ERROR] Kubenet cluster deployment failure."
     KUBENET_ERROR=1
+fi
+
+if [ $KUBENET_ERROR -eq 0 ];then
+    echo "Installing Prometheus and Grafana in Kubenet Cluster ..."
+    terraform -chdir="terraform/kubenet_resources" apply --auto-approve
+
+    if [ $? -eq 0 ]; then
+        echo "Success..."
+    else
+        echo "[ERROR] Promtheus and Grafana failed to install in Kubenet CLuster!"
+    fi
 fi
 
 echo "Deploying Cilium cluster..."

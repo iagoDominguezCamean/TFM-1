@@ -23,10 +23,10 @@ else
     echo "The velero-plugin-for-microsoft-azure image exists. Skipping."
 fi
 
-EXISTS=$(az acr repository show --name $ACR --image bitnami/kubectl:1.31 || echo "Import")
+EXISTS=$(az acr repository show --name $ACR --image bitnami/kubectl:1.31.4 || echo "Import")
 if [ "$EXISTS" = "Import" ]; then
-    echo "Importing kubectl:1.31 image"
-    az acr import -n $ACR --source docker.io/bitnami/kubectl:1.31 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
+    echo "Importing kubectl:1.31.4 image"
+    az acr import -n $ACR --source public.ecr.aws/bitnami/kubectl:1.31.4 --force #--username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
 else
     echo "The kubectl image exists. Skipping."
 fi
