@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: benchmark
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortio-server
+  namespace: benchmark
+spec:
+  containers:
+  - name: fortio
+    image: idomingc.azurecr.io/fortio:1.73.2
+    args: ["server", "-http-port", "8080"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortio-client
+  namespace: benchmark
+spec:
+  containers:
+  - name: fortio
+    image: idomingc.azurecr.io/fortio:1.73.2
+    command: ["sleep", "3600"]

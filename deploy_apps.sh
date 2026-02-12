@@ -8,18 +8,18 @@ cluster=$1
 
 echo "Import images from dockerhub"
 
-EXISTS=$(az acr repository show --name $ACR --image library/mysql:9.3.0 || echo "Import")
+EXISTS=$(az acr repository show --name $ACR --image bitnamilegacy/mysql:9.3.0 || echo "Import")
 if [ "$EXISTS" = "Import" ]; then
     echo "Importing MySQL image"
-    az acr import -n $ACR --source docker.io/library/mysql:9.3.0 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
+    az acr import -n $ACR --source docker.io/bitnamilegacy/mysql:9.3.0 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
 else
     echo "The MySQL image exists. Skipping."
 fi
 
-EXISTS=$(az acr repository show --name $ACR --image library/wordpress:6.8.1 || echo "Import")
+EXISTS=$(az acr repository show --name $ACR --image bitnamilegacy/wordpress:6.8.1 || echo "Import")
 if [ "$EXISTS" = "Import" ]; then
     echo "Importing Wordpress image"
-    az acr import -n $ACR --source docker.io/library/wordpress:6.8.1 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
+    az acr import -n $ACR --source docker.io/bitnamilegacy/wordpress:6.8.1 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
 else
     echo "The Wordpress image exists. Skipping."
 fi
@@ -53,9 +53,13 @@ if [ $cluster == "kubenet" ]; then
     kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/ingress.yaml
     kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/app01/kubenet-deployment.yaml
     kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/wordpress/deployment-wordpress.yaml
+    kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/benchmark/fortio.yaml
+    kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/benchmark/iperf3.yaml
 elif [ $cluster == "cilium" ]; then
     echo "Deploying app insto Cilium cluster..."
     kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/ingress.yaml
     kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app01c/cilium-deployment.yaml
     kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/wordpress/deployment-wordpress.yaml
+    kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/benchmark/fortio.yaml
+    kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/benchmark/iperf3.yaml
 fi

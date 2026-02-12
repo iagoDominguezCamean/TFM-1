@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: library/mysql:9.3.0
+        image: bitnamilegacy/mysql:9.3.0
         ports:
           - containerPort: 3306
         env:
@@ -74,7 +74,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: library/wordpress:6.8.1
+        image: bitnamilegacy/wordpress:6.8.1
         ports:
           - containerPort: 8080
         env:
