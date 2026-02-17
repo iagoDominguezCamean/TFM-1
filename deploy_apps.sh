@@ -60,6 +60,6 @@ elif [ $cluster == "cilium" ]; then
     kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/ingress.yaml
     kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/app01c/cilium-deployment.yaml
     kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/wordpress/deployment-wordpress.yaml
-    kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/benchmark/fortio.yaml
-    kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/benchmark/iperf3.yaml
+    kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/benchmark/fortio.yaml
+    kubectl --kubeconfig="/home/iagodc/.kube/config_cilium" apply -f k8s/benchmark/iperf3.yaml
 fi
