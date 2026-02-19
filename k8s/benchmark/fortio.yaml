@@ -8,11 +8,26 @@ kind: Pod
 metadata:
   name: fortio-server
   namespace: benchmark
+  labels:
+    app: fortio-server
 spec:
   containers:
   - name: fortio
-    image: idomingc.azurecr.io/fortio:1.73.2
+    image: acridomingc.azurecr.io/fortio/fortio:1.73.2
     args: ["server", "-http-port", "8080"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fortio-server
+  namespace: benchmark
+spec:
+  selector:
+    app: fortio-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
 ---
 apiVersion: v1
 kind: Pod
@@ -22,5 +37,11 @@ metadata:
 spec:
   containers:
   - name: fortio
-    image: idomingc.azurecr.io/fortio:1.73.2
-    command: ["sleep", "3600"]
+    image: acridomingc.azurecr.io/library/ubuntu:22.04
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        apt update && apt install -y wget && \
+        wget -qO /tmp/fortio https://github.com/fortio/fortio/releases/download/v1.73.2/fortio_1.73.2_amd64.deb &&\
+        dpkg -i /tmp/fortio && chmod +x /usr/bin/fortio && tail -f /dev/null
+

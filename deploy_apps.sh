@@ -48,6 +48,14 @@ else
     echo "The nginx image exists. Skipping."
 fi
 
+EXISTS=$(az acr repository show --name $ACR --image library/ubuntu:22.04 || echo "Import")
+if [ "$EXISTS" = "Import" ]; then
+    echo "Importing Ubuntu image"
+    az acr import -n $ACR --source docker.io/library/ubuntu:22.04 --force --username $DOCKER_HUB_USER --password $DOCKER_HUB_PAT
+else
+    echo "The nginx image exists. Skipping."
+fi
+
 if [ $cluster == "kubenet" ]; then
     echo "Deploying apps into Kubenet cluster..."
     kubectl --kubeconfig="/home/iagodc/.kube/config_kubenet" apply -f k8s/ingress.yaml

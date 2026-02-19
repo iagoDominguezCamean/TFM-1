@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
   - name: iperf
-    image: idomingc.azurecr.io/iperf3:latest
+    image: acridomingc.azurecr.io/networkstatic/iperf3:latest
     args: ["-s"]
 ---
 apiVersion: v1
@@ -17,5 +17,5 @@ metadata:
 spec:
   containers:
   - name: iperf
-    image: idomingc.azurecr.io/iperf3:latest
+    image: acridomingc.azurecr.io/networkstatic/iperf3:latest
     command: ["sleep", "3600"]
