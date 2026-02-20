@@ -22,17 +22,17 @@ kubectl --kubeconfig="/home/iagodc/.kube/$1" exec -n benchmark iperf-client -- \
 # --- FORTIO TEST ---
 echo "Running fortio HTTP latency test..."
 
-FORTIO_SERVER_IP=$(kubectl --kubeconfig="/home/iagodc/.kube/$1" get pod fortio-server -n benchmark -o jsonpath='{.status.podIP}')
+# FORTIO_SERVER_IP=$(kubectl --kubeconfig="/home/iagodc/.kube/$1" get pod fortio-server -n benchmark -o jsonpath='{.status.podIP}')
 
 kubectl --kubeconfig="/home/iagodc/.kube/$1" exec -n benchmark fortio-client -- \
-  fortio load -qps 200 -t 60 http://$FORTIO_SERVER_IP:8080 \
-  | tee $OUT_DIR/fortio.txt
+  fortio load -qps 200 -t 60s http://fortio-server:8080 \
+  2>&1 | tee $OUT_DIR/fortio.txt
 
 # --- METRICS ---
 echo "Collecting resource metrics..."
 
 kubectl --kubeconfig="/home/iagodc/.kube/$1" top nodes | tee $OUT_DIR/nodes.txt
-kubectl --kubeconfig="/home/iagodc/.kube/$1" top pods -n app | tee $OUT_DIR/app-pods.txt
+kubectl --kubeconfig="/home/iagodc/.kube/$1" top pods  | tee $OUT_DIR/app-pods.txt
 kubectl --kubeconfig="/home/iagodc/.kube/$1" top pods -n benchmark | tee $OUT_DIR/benchmark-pods.txt
 
 echo "Benchmark completed."
