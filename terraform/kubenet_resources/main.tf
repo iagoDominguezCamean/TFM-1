@@ -1,5 +1,6 @@
 resource "random_password" "grafana_password" {
-  length = 14
+  length           = 14
+  override_special = "@$&#!"
 }
 
 resource "random_string" "grafana_adminuser" {
